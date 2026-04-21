@@ -128,6 +128,11 @@ const desc = summary ?? `抱财丘徒步观察：${title}`;
 			grid-template-columns: 1fr;
 			gap: var(--space-lg);
 		}
+
+		/* 移动端单栏时图片不 sticky，随内容正常滚动 */
+		.gallery {
+			position: static;
+		}
 	}
 
 	.article__right {

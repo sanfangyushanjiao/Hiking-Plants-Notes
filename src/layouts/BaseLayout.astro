@@ -1,0 +1,38 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+	title: string;
+	description?: string;
+	/** 为 true 时不渲染全站页脚（如首页仅保留 Hero） */
+	hideFooter?: boolean;
+}
+
+const {
+	title,
+	description = '记录广西壮族自治区桂林市资源县抱财丘一带徒步沿线的植物观察，图文结合，清新自然。',
+	hideFooter = false,
+} = Astro.props;
+const fullTitle = title.includes('·') ? title : `${title} · 抱财丘植物手记`;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="generator" content={Astro.generator} />
+		<meta name="description" content={description} />
+		<title>{fullTitle}</title>
+	</head>
+	<body>
+		<Header />
+		<main id="main">
+			<slot />
+		</main>
+		{!hideFooter && <Footer />}
+	</body>
+</html>

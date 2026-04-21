@@ -1,0 +1,138 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import PlantCard from './PlantCard.astro';
+
+interface Props {
+	entries: CollectionEntry<'plants'>[];
+}
+
+const { entries } = Astro.props;
+
+const fuseSource = entries.map((e) => ({
+	id: e.id,
+	tags: e.data.tags,
+}));
+
+const allTags = [...new Set(entries.flatMap((e) => e.data.tags))].sort((a, b) => a.localeCompare(b, 'zh-CN'));
+---
+
+<section class="catalog" aria-labelledby="catalog-heading">
+	<h2 id="catalog-heading" class="sr-only">植物图鉴筛选与列表</h2>
+
+	{
+		allTags.length > 0 && (
+			<div class="catalog__controls">
+				<div class="catalog__tags" data-tag-filters>
+					<div class="catalog__chips" role="group" aria-label="按标签筛选">
+						{allTags.map((tag) => (
+							<button type="button" class="chip" data-tag={tag}>
+								{tag}
+							</button>
+						))}
+					</div>
+				</div>
+			</div>
+		)
+	}
+
+	<div class="catalog__grid" data-plant-grid>
+		{
+			entries.map((entry) => (
+				<div class="catalog__cell" data-plant-id={entry.id} data-plant-card>
+					<PlantCard entry={entry} />
+				</div>
+			))
+		}
+	</div>
+
+	<p class="catalog__empty hidden" data-catalog-empty>
+		暂无匹配的植物记录，可尝试更换关键词或取消标签筛选。
+	</p>
+</section>
+
+<script define:vars={{ fuseSource }}>
+	const cells = [...document.querySelectorAll('[data-plant-card]')];
+	const emptyMsg = document.querySelector('[data-catalog-empty]');
+	const chipButtons = [...document.querySelectorAll('.chip[data-tag]')];
+
+	let activeTag = '';
+
+	function applyFilter() {
+		let visible = 0;
+		for (const cell of cells) {
+			const id = cell.getAttribute('data-plant-id');
+			const entry = fuseSource.find((item) => item.id === id);
+			const show = !activeTag || Boolean(entry && entry.tags.includes(activeTag));
+			cell.classList.toggle('hidden', !show);
+			if (show) visible++;
+		}
+		emptyMsg?.classList.toggle('hidden', visible !== 0);
+	}
+
+	for (const btn of chipButtons) {
+		btn.addEventListener('click', () => {
+			const tag = btn.getAttribute('data-tag') ?? '';
+			if (activeTag === tag) {
+				activeTag = '';
+				for (const b of chipButtons) b.classList.remove('is-active');
+			} else {
+				activeTag = tag;
+				for (const b of chipButtons) {
+					b.classList.toggle('is-active', b.getAttribute('data-tag') === activeTag);
+				}
+			}
+			applyFilter();
+		});
+	}
+</script>
+
+<style>
+	.catalog__controls {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-md);
+		margin-bottom: var(--space-lg);
+	}
+
+	.catalog__chips {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-sm);
+	}
+
+	.chip {
+		font-family: var(--font-kai);
+		font-size: 0.95rem;
+		padding: 0.35rem 0.85rem;
+		border-radius: 999px;
+		border: 2px solid rgba(16, 86, 102, 0.25);
+		background: rgba(247, 244, 213, 0.6);
+		color: var(--color-forest);
+		cursor: pointer;
+		transition:
+			background 0.15s,
+			border-color 0.15s;
+	}
+
+	.chip:hover {
+		border-color: var(--color-moss);
+		background: rgba(131, 153, 88, 0.12);
+	}
+
+	.chip.is-active {
+		background: rgba(16, 86, 102, 0.15);
+		border-color: var(--color-midnight-teal);
+	}
+
+	.catalog__grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(16.5rem, 1fr));
+		gap: var(--space-lg);
+	}
+
+	.catalog__empty {
+		margin: var(--space-lg) 0 0;
+		color: var(--color-midnight-teal);
+		text-align: center;
+	}
+</style>

@@ -1,0 +1,47 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PlantCatalog from '../../components/PlantCatalog.astro';
+import Disclaimer from '../../components/Disclaimer.astro';
+
+const entries = await getCollection('plants', ({ data }) => !data.draft);
+const sorted = entries.sort((a, b) => {
+	const da = a.data.date?.getTime() ?? 0;
+	const db = b.data.date?.getTime() ?? 0;
+	return db - da;
+});
+---
+
+<BaseLayout
+	title="植物图鉴"
+	description="广西壮族自治区桂林市资源县抱财丘徒步沿线植物图文记录，支持标签筛选与关键词搜索。"
+>
+	<div class="page-head container">
+		<h1 class="page-title">植物图鉴</h1>
+		<p class="page-desc">
+			共 {sorted.length} 条记录。可使用搜索与标签缩小范围；点击卡片查看详情与多图。
+		</p>
+	</div>
+
+	<div class="container">
+		<PlantCatalog entries={sorted} />
+		<Disclaimer />
+	</div>
+</BaseLayout>
+
+<style>
+	.page-head {
+		padding: var(--space-lg) 0 var(--space-md);
+	}
+
+	.page-title {
+		margin: 0 0 var(--space-sm);
+		font-size: clamp(1.75rem, 3vw, 2.25rem);
+	}
+
+	.page-desc {
+		margin: 0;
+		max-width: 40rem;
+		color: var(--color-body);
+	}
+</style>

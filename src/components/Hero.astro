@@ -1,0 +1,204 @@
+---
+interface Props {
+	title: string;
+	subtitle?: string;
+	imageSrc?: string;
+	imageAlt?: string;
+	/** PC 端一屏展示实拍（与顶栏叠压，图片铺满可视高度） */
+	fullScreen?: boolean;
+}
+
+const {
+	title,
+	subtitle,
+	imageSrc = '/images/trail/hero-default.svg',
+	imageAlt = '抱财丘徒步路线沿途山林氛围图',
+	fullScreen = false,
+} = Astro.props;
+---
+
+<section class:list={['hero', { 'hero--fullscreen': fullScreen }]}>
+	<div class="hero__media" aria-hidden="true">
+		<img class="hero__img" src={imageSrc} alt="" width="1600" height="900" loading="eager" fetchpriority="high" />
+	</div>
+	<div class="hero__overlay"></div>
+	<div class="hero__aside" aria-label="补充说明">
+		<div class="hero__aside-inner">
+			<slot name="aside" />
+		</div>
+	</div>
+	<div class="container hero__content">
+		<h1 class="hero__title">{title}</h1>
+		{subtitle && <p class="hero__subtitle">{subtitle}</p>}
+		<slot />
+	</div>
+</section>
+
+<style>
+	.hero {
+		position: relative;
+		min-height: min(52vh, 520px);
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-end;
+		align-items: stretch;
+		overflow: hidden;
+		margin-bottom: var(--space-xl);
+	}
+
+	/* 首页全屏实拍：占满视口高度，整体上移与固定顶栏衔接 */
+	.hero--fullscreen {
+		min-height: 100svh;
+		margin-top: calc(-1 * var(--site-header-height));
+		padding-top: var(--site-header-height);
+		margin-bottom: var(--space-xl);
+	}
+
+	@media (min-width: 721px) {
+		.hero--fullscreen {
+			min-height: 100vh;
+		}
+	}
+
+	.hero__media {
+		position: absolute;
+		inset: 0;
+	}
+
+	.hero__img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: center center;
+	}
+
+	.hero__overlay {
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(180deg, rgba(10, 51, 35, 0.15) 0%, rgba(10, 51, 35, 0.55) 100%);
+	}
+
+	.hero__content {
+		position: relative;
+		padding: var(--space-xl) 0 var(--space-lg);
+		color: var(--color-cream);
+		text-shadow: 0 1px 2px rgba(10, 51, 35, 0.35);
+	}
+
+	.hero__title {
+		margin: 0 0 var(--space-sm);
+		font-size: clamp(1.75rem, 4vw, 2.5rem);
+		color: var(--color-cream);
+		max-width: 20ch;
+		opacity: 0;
+		transform: translateY(0.8rem);
+		animation: heroFadeUp 0.7s ease 0.3s forwards;
+	}
+
+	.hero__subtitle {
+		margin: 0 0 var(--space-md);
+		max-width: 40ch;
+		font-size: 1.1rem;
+		line-height: 1.65;
+		opacity: 0;
+		transform: translateY(0.8rem);
+		animation: heroFadeUp 0.7s ease 0.3s forwards;
+	}
+
+	/* 右上角补充文案：与左下角同色系、同字族与字影 */
+	.hero__aside {
+		position: absolute;
+		z-index: 2;
+		top: calc(var(--site-header-height) + var(--space-md));
+		right: max(1rem, calc((100vw - var(--max-width)) / 2));
+		max-width: min(26rem, 38vw);
+		pointer-events: none;
+	}
+
+	.hero__aside :global(a) {
+		pointer-events: auto;
+	}
+
+	.hero__aside:has(.hero__aside-inner:empty) {
+		display: none;
+	}
+
+	.hero__aside-inner {
+		color: var(--color-cream);
+		text-shadow: 0 1px 2px rgba(10, 51, 35, 0.35);
+		opacity: 0;
+		transform: translateY(0.6rem);
+		animation: heroFadeUp 0.75s ease 0.85s forwards;
+	}
+
+	.hero__aside-inner :global(> div) {
+		margin: 0;
+	}
+
+	.hero__aside-inner :global(h2) {
+		margin: 0 0 var(--space-sm);
+		font-family: var(--font-kai);
+		font-weight: 600;
+		font-size: clamp(1.35rem, 2.4vw, 2rem);
+		line-height: 1.35;
+		color: var(--color-cream);
+	}
+
+	.hero__aside-inner :global(p) {
+		margin: 0 0 var(--space-md);
+		font-family: var(--font-kai);
+		font-size: clamp(0.95rem, 1.35vw, 1.08rem);
+		line-height: 1.7;
+		opacity: 0.96;
+	}
+
+	.hero__aside-inner :global(ul) {
+		margin: 0;
+		padding-left: 1.2rem;
+		font-family: var(--font-kai);
+		font-size: clamp(0.95rem, 1.35vw, 1.05rem);
+		line-height: 1.65;
+		opacity: 0.96;
+	}
+
+	.hero__aside-inner :global(li) {
+		margin-bottom: var(--space-xs);
+	}
+
+	.hero__aside-inner :global(li::marker) {
+		color: var(--color-cream);
+	}
+
+	@media (max-width: 720px) {
+		.hero__aside {
+			position: relative;
+			top: auto;
+			right: auto;
+			left: auto;
+			max-width: 100%;
+			width: 100%;
+			padding-inline: 1rem;
+			margin-top: calc(var(--site-header-height) + var(--space-sm));
+			margin-bottom: calc(-1 * var(--space-lg));
+			pointer-events: auto;
+		}
+
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.hero__title,
+		.hero__subtitle,
+		.hero__aside-inner {
+			animation: none;
+			opacity: 1;
+			transform: none;
+		}
+	}
+
+	@keyframes heroFadeUp {
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+</style>

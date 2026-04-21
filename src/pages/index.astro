@@ -1,0 +1,60 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+---
+
+<BaseLayout
+	hideFooter
+	title="首页 · 抱财丘植物手记"
+	description="广西壮族自治区桂林市资源县抱财丘徒步艺术共创：沿途植物观察与图文记录，清新自然的绿色手记。"
+>
+	<Hero
+		fullScreen
+		title="走进抱财丘的绿"
+		subtitle="抱财丘一带尚未充分开发的徒步线上，地貌丰富、林相多样。我们以图文记录沿途草木，留存一份可分享的乡土植物档案。"
+		imageSrc="/images/trail/hero.webp"
+		imageAlt="抱财丘徒步沿线环境实拍"
+	>
+		<div slot="aside">
+			<h2>我们在记录什么</h2>
+			<p>
+				沿线的乔木、灌木、草本与藤本，以及在传统知识中被提及的药用植物资源——均以实地拍摄与文字说明呈现。风格追求清爽、治愈，与山林气质相符。
+			</p>
+			<ul>
+				<li>实拍照片与观察笔记，便于对照辨认</li>
+				<li>按标签浏览，如药用、生境或物候线索</li>
+				<li>支持关键词搜索，适合课堂展示与公众科普</li>
+			</ul>
+		</div>
+		<div class="hero-actions">
+			<a class="btn btn--primary" href="/tujian">浏览植物图鉴</a>
+			<a class="btn btn--moss" href="/luxian">了解路线与团队</a>
+		</div>
+	</Hero>
+</BaseLayout>
+
+<style>
+	.hero-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-sm);
+		opacity: 0;
+		transform: translateY(0.6rem);
+		animation: heroFadeUp 0.65s ease 1.55s forwards;
+	}
+
+	@keyframes heroFadeUp {
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.hero-actions {
+			animation: none;
+			opacity: 1;
+			transform: none;
+		}
+	}
+</style>

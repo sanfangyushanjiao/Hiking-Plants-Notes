@@ -1,0 +1,183 @@
+---
+const pathname = Astro.url.pathname;
+const links = [
+	{ href: '/', label: '首页' },
+	{ href: '/tujian', label: '植物图鉴' },
+	{ href: '/luxian', label: '路线与团队' },
+];
+---
+
+<header class="site-header">
+	<div class="container header-inner">
+		<a class="brand" href="/" aria-label="返回首页">
+			<span class="brand__leaf" aria-hidden="true"></span>
+			<span class="brand__text">抱财丘徒步 · 植物手记</span>
+		</a>
+		<button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
+			<span class="sr-only">打开菜单</span>
+			<span class="nav-toggle__bar"></span>
+			<span class="nav-toggle__bar"></span>
+			<span class="nav-toggle__bar"></span>
+		</button>
+		<nav id="site-nav" class="site-nav" data-site-nav>
+			<ul class="nav-list">
+				{
+					links.map(({ href, label }) => (
+						<li>
+							<a
+								href={href}
+								class:list={[
+									'nav-link',
+									{
+										'is-active':
+											pathname === href || (href !== '/' && pathname.startsWith(href)),
+									},
+								]}
+							>
+								{label}
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		</nav>
+	</div>
+</header>
+
+<style>
+	.site-header {
+		position: sticky;
+		top: 0;
+		z-index: 50;
+		background: rgba(247, 244, 213, 0.92);
+		backdrop-filter: blur(10px);
+		border-bottom: 1px solid rgba(16, 86, 102, 0.12);
+	}
+
+	.header-inner {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--space-md);
+		padding-block: var(--space-sm);
+		position: relative;
+	}
+
+	.brand {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-sm);
+		color: var(--color-forest);
+		text-decoration: none;
+		font-weight: 600;
+		font-size: 1.1rem;
+	}
+
+	.brand:hover {
+		color: var(--color-midnight-teal);
+	}
+
+	.brand__leaf {
+		width: 1.75rem;
+		height: 1.75rem;
+		border-radius: 0 70% 40% 70%;
+		background: linear-gradient(145deg, var(--color-moss), var(--color-midnight-teal));
+		opacity: 0.9;
+		flex-shrink: 0;
+	}
+
+	.nav-toggle {
+		display: none;
+		flex-direction: column;
+		justify-content: center;
+		gap: 5px;
+		width: 2.75rem;
+		height: 2.75rem;
+		padding: 0;
+		border: none;
+		background: transparent;
+		cursor: pointer;
+	}
+
+	.nav-toggle__bar {
+		display: block;
+		height: 2px;
+		width: 100%;
+		background: var(--color-forest);
+		border-radius: 2px;
+	}
+
+	.site-nav {
+		display: block;
+	}
+
+	.nav-list {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-sm) var(--space-lg);
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.nav-link {
+		color: var(--color-body);
+		text-decoration: none;
+		font-size: 1.05rem;
+		padding: 0.25rem 0;
+		border-bottom: 2px solid transparent;
+	}
+
+	.nav-link:hover,
+	.nav-link.is-active {
+		color: var(--color-midnight-teal);
+		border-bottom-color: var(--color-rose-earth);
+	}
+
+	@media (max-width: 720px) {
+		.nav-toggle {
+			display: flex;
+		}
+
+		.site-nav {
+			position: absolute;
+			left: 0;
+			right: 0;
+			top: 100%;
+			background: var(--color-cream);
+			border-bottom: 1px solid rgba(16, 86, 102, 0.12);
+			max-height: 0;
+			overflow: hidden;
+			transition: max-height 0.3s ease;
+		}
+
+		.site-nav.is-open {
+			max-height: 320px;
+		}
+
+		.nav-list {
+			flex-direction: column;
+			padding: var(--space-md) 1rem var(--space-lg);
+		}
+	}
+</style>
+
+<script>
+	function syncHeaderHeight() {
+		const el = document.querySelector('.site-header');
+		if (!el) return;
+		const h = Math.round(el.getBoundingClientRect().height);
+		document.documentElement.style.setProperty('--site-header-height', `${h}px`);
+	}
+
+	syncHeaderHeight();
+	window.addEventListener('resize', syncHeaderHeight);
+
+	const toggle = document.querySelector('[data-nav-toggle]');
+	const nav = document.querySelector('[data-site-nav]');
+	toggle?.addEventListener('click', () => {
+		const open = nav?.classList.toggle('is-open');
+		toggle?.setAttribute('aria-expanded', open ? 'true' : 'false');
+		requestAnimationFrame(syncHeaderHeight);
+	});
+</script>

@@ -1,0 +1,80 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+	entry: CollectionEntry<'plants'>;
+}
+
+const { entry } = Astro.props;
+const { title, photos, tags } = entry.data;
+const cover = photos[0] ?? '/images/plants/placeholder.svg';
+---
+
+<a class="plant-card" href={`/zhiwu/${entry.id}`}>
+	<div class="plant-card__media">
+		<img src={cover} alt={`${title}的照片`} loading="lazy" width="600" height="450" />
+	</div>
+	<div class="plant-card__body">
+		<h2 class="plant-card__title">{title}</h2>
+		<div class="plant-card__tags">
+			{tags.map((t) => (
+				<span class="tag">{t}</span>
+			))}
+		</div>
+	</div>
+</a>
+
+<style>
+	.plant-card {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		border-radius: var(--radius);
+		overflow: hidden;
+		background: #fffef6;
+		border: 1px solid rgba(16, 86, 102, 0.12);
+		box-shadow: var(--shadow-soft);
+		color: inherit;
+		text-decoration: none;
+		transition:
+			transform 0.2s,
+			box-shadow 0.2s;
+	}
+
+	.plant-card:hover {
+		transform: translateY(-3px);
+		box-shadow: 0 12px 36px rgba(10, 51, 35, 0.12);
+	}
+
+	.plant-card__media {
+		aspect-ratio: 4 / 3;
+		overflow: hidden;
+		background: rgba(131, 153, 88, 0.15);
+	}
+
+	.plant-card__media img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.plant-card__body {
+		padding: var(--space-md);
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		gap: var(--space-sm);
+		flex: 1;
+	}
+
+	.plant-card__title {
+		margin: 0;
+		font-size: 1.2rem;
+	}
+
+	.plant-card__tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-xs);
+	}
+</style>

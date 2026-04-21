@@ -1,0 +1,250 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Disclaimer from '../components/Disclaimer.astro';
+---
+
+<BaseLayout
+	title="路线与团队"
+	description="广西壮族自治区桂林市资源县抱财丘徒步艺术共创背景、路线概况、安全与环保提示。"
+>
+	<div class="container page">
+		<h1 class="page-title">路线与团队</h1>
+
+		<div class="intro-grid">
+			<section class="block">
+				<h2>实践背景</h2>
+				<p>
+					本次艺术共创选址于广西桂林资源县抱财丘（阳桥阴桥小道），该山野徒步线路原生态保存完好、尚未深度开发，区域内山林地貌多样，野生植物资源禀赋优越，同时留存大量本土民间药用植物与百年山野人文历史传说。
+				</p>
+				<p>
+					团队全程完成6.16公里山野徒步踏勘，累计爬升429米，完整记录线路地形、植被风貌与沿途生态。项目以山野实地观察、物种影像采集、文字资料整理为核心，挖掘沿线植物资源价值与乡土人文底蕴，最终整合全部调研成果，搭建面向大众科普的植物主题公益网站，实现山野生态科普、乡土文化传播与自然研学价值的融合。
+				</p>
+			</section>
+
+			<section class="block">
+				<h2>抱财丘路线概况</h2>
+				<p>
+					从抱财丘沿资江徒步约2.2公里，便可抵达锦头村，感受资源县传统古民居的质朴韵味。随后沿阳桥阴桥小道进山，起点海拔约330米，一路拾级而上，至最高点蒋家山约670米。
+				</p>
+				<p>
+					沿途以常绿阔叶林为主，栲、槠、青冈、木荷、樟、楠遍布，林下生有柃木、杜鹃、乌饭树与多种蕨类，山间更盛产杉木、马尾松、毛竹及各类中草药。途中需跨过5座溪涧竹桥，穿行大片河床裸岩与竹林松杉间，可见旧时伐木痕迹与被草木覆盖的废弃梯田。
+				</p>
+				<p>
+					这里四季皆景：春赏杜鹃，夏可溯溪避暑，秋观层林尽染、野果满山，冬遇降雪则可见雾凇。锦头村至蒋家山全程约6公里，徒步新手约需4小时。
+				</p>
+			</section>
+		</div>
+
+		<section class="block block--wide" aria-labelledby="track-heading">
+			<h2 id="track-heading">轨迹示意图</h2>
+			<div class="media-row media-row--track">
+				<figure class="media-figure">
+					<img
+						src="/images/trail/guiji-01.webp"
+						alt="抱财丘徒步轨迹示意图一"
+						loading="lazy"
+						width="1600"
+						height="900"
+					/>
+					<figcaption class="media-cap">轨迹图一</figcaption>
+				</figure>
+				<figure class="media-figure">
+					<img
+						src="/images/trail/guiji-02.webp"
+						alt="抱财丘徒步轨迹示意图二"
+						loading="lazy"
+						width="1600"
+						height="900"
+					/>
+					<figcaption class="media-cap">轨迹图二</figcaption>
+				</figure>
+			</div>
+		</section>
+
+		<section class="block block--wide" aria-labelledby="env-heading">
+			<h2 id="env-heading">沿线环境</h2>
+			<div class="media-grid">
+				{
+					[1, 2, 3, 4, 5, 6, 7, 8].map((n) => (
+						<figure class="media-thumb">
+							<img
+								src={`/images/trail/huanjing-${String(n).padStart(2, '0')}.webp`}
+								alt={`抱财丘徒步沿线环境实拍 ${n}`}
+								loading="lazy"
+								width="800"
+								height="600"
+							/>
+						</figure>
+					))
+				}
+			</div>
+		</section>
+
+		<section class="block">
+			<h2>安全与环保</h2>
+			<ul>
+				<li>提前了解天气与路况，结伴而行，量力而行。</li>
+				<li>不离开既定路径随意开路，减少对新土与溪岸的扰动。</li>
+				<li>以观察、拍摄、记录为主；采集标本须符合法规与许可要求。</li>
+				<li>带走垃圾，不留下一次性用品与明火痕迹。</li>
+			</ul>
+		</section>
+
+		<Disclaimer />
+	</div>
+</BaseLayout>
+
+<style>
+	.page {
+		padding: var(--space-lg) 0 0;
+	}
+
+	.page-title {
+		margin: 0 0 var(--space-lg);
+		font-size: clamp(1.75rem, 3vw, 2.25rem);
+	}
+
+	.intro-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: var(--space-lg) var(--space-xl);
+		margin-bottom: var(--space-lg);
+	}
+
+	@media (max-width: 720px) {
+		.intro-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	.intro-grid .block {
+		max-width: none;
+		margin-bottom: 0;
+	}
+
+	.block {
+		margin-bottom: var(--space-lg);
+		max-width: 48rem;
+	}
+
+	.block h2 {
+		font-size: 1.35rem;
+		margin: 0 0 var(--space-sm);
+	}
+
+	.block p {
+		margin: 0 0 var(--space-md);
+	}
+
+	.block ul {
+		margin: 0;
+		padding-left: 1.25rem;
+	}
+
+	.block li {
+		margin-bottom: var(--space-sm);
+	}
+
+	.block--muted {
+		padding: var(--space-md);
+		border-radius: var(--radius);
+		background: rgba(131, 153, 88, 0.1);
+		border: 1px solid rgba(131, 153, 88, 0.25);
+	}
+
+	.block code {
+		font-family: var(--font-kai);
+		font-size: 0.95em;
+		color: var(--color-midnight-teal);
+	}
+
+	.block--wide {
+		max-width: min(100%, var(--max-width));
+	}
+
+	.media-row {
+		display: grid;
+		gap: var(--space-md);
+		grid-template-columns: 1fr;
+	}
+
+	@media (min-width: 768px) {
+		.media-row {
+			grid-template-columns: 1fr 1fr;
+		}
+	}
+
+	/* 轨迹竖图：限制高度；无白底卡片，直接铺在页面底色上 */
+	.media-row--track .media-figure {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		min-height: 0;
+		background: transparent;
+		border: none;
+		box-shadow: none;
+		border-radius: 0;
+		overflow: visible;
+	}
+
+	.media-row--track .media-figure img {
+		width: auto;
+		max-width: 100%;
+		height: auto;
+		object-fit: contain;
+		object-position: center;
+		max-height: min(42vh, 420px);
+	}
+
+	@media (min-width: 768px) {
+		.media-row--track .media-figure img {
+			max-height: min(58vh, 620px);
+		}
+	}
+
+	.media-figure {
+		margin: 0;
+		border-radius: var(--radius);
+		overflow: hidden;
+		border: 1px solid rgba(16, 86, 102, 0.12);
+		box-shadow: var(--shadow-soft);
+		background: #fffef6;
+	}
+
+	.media-figure img {
+		width: 100%;
+		height: auto;
+		display: block;
+		vertical-align: middle;
+	}
+
+	.media-cap {
+		margin: 0;
+		padding: var(--space-sm) var(--space-md);
+		font-size: 0.95rem;
+		color: var(--color-midnight-teal);
+		text-align: center;
+	}
+
+	.media-grid {
+		display: grid;
+		gap: var(--space-md);
+		grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+	}
+
+	.media-thumb {
+		margin: 0;
+		border-radius: var(--radius);
+		overflow: hidden;
+		border: 1px solid rgba(16, 86, 102, 0.1);
+		box-shadow: var(--shadow-soft);
+		background: #fffef6;
+	}
+
+	.media-thumb img {
+		width: 100%;
+		aspect-ratio: 4 / 3;
+		object-fit: cover;
+		display: block;
+	}
+</style>

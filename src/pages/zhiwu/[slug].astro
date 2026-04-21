@@ -29,11 +29,14 @@ const desc = summary ?? `抱财丘徒步观察：${title}`;
 			{
 				photos.length > 0 && (
 					<div class="gallery" aria-label="植物照片">
-						{photos.map((src, i) => (
-							<figure class="gallery__item">
-								<img src={src} alt={`${title}的照片 ${i + 1}`} loading={i === 0 ? 'eager' : 'lazy'} width="1200" height="900" />
-							</figure>
-						))}
+						{photos.map((src, i) => {
+							const detail = src.endsWith('.webp') ? src.replace(/\.webp$/, '_detail.webp') : src;
+							return (
+								<figure class="gallery__item">
+									<img src={detail} alt={`${title}的照片 ${i + 1}`} loading={i === 0 ? 'eager' : 'lazy'} width="900" height="675" />
+								</figure>
+							);
+						})}
 					</div>
 				)
 			}

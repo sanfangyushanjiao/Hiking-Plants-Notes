@@ -10,7 +10,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "images:optimize": "node scripts/optimize-trail-images.mjs"
+    "images:optimize": "node scripts/optimize-trail-images.mjs",
+    "images:plants": "node scripts/optimize-plant-images.mjs"
   },
   "dependencies": {
     "astro": "^6.1.8",

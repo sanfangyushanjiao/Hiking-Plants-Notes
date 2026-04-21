@@ -8,11 +8,13 @@ interface Props {
 const { entry } = Astro.props;
 const { title, photos, tags } = entry.data;
 const cover = photos[0] ?? '/images/plants/placeholder.svg';
+// 缩略图：将 .webp 替换为 _thumb.webp（若非 placeholder）
+const thumb = cover.endsWith('.webp') ? cover.replace(/\.webp$/, '_thumb.webp') : cover;
 ---
 
 <a class="plant-card" href={`/zhiwu/${entry.id}`}>
 	<div class="plant-card__media">
-		<img src={cover} alt={`${title}的照片`} loading="lazy" width="600" height="450" />
+		<img src={thumb} alt={`${title}的照片`} loading="lazy" width="480" height="360" />
 	</div>
 	<div class="plant-card__body">
 		<h2 class="plant-card__title">{title}</h2>
